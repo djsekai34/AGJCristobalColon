@@ -4,21 +4,12 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X } from "lucide-react";
 import logoGame from "../Imagenes/logoGame.png";
 
+// 1. Corregimos las rutas para que apunten a la raíz "/" que es tu Home
 const navItems = [
-  { label: "Inicio", path: "/", section: "#inicio", route: "/inicio" },
-  {
-    label: "Explicación",
-    path: "/explicacion",
-    section: "#explicacion",
-    route: "/explicacion",
-  },
-  { label: "Juego", path: "/juego", section: "#juego", route: "/juego" },
-  {
-    label: "Nosotros",
-    path: "/nosotros",
-    section: "#nosotros",
-    route: "/nosotros",
-  },
+  { label: "Inicio", section: "#inicio", route: "/" },
+  { label: "Explicación", section: "#explicacion", route: "/" },
+  { label: "Juego", section: "#juego", route: "/" },
+  { label: "Nosotros", section: "#nosotros", route: "/" },
 ];
 
 export default function Navbar() {
@@ -34,14 +25,24 @@ export default function Navbar() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+  // 2. Nueva lógica de navegación híbrida (Scroll / Redirección)
   const handleNavClick = (item, e) => {
     e.preventDefault();
     setMobileOpen(false);
+
     if (isHome) {
+      // Si ya estás en la Home, busca el elemento y hace scroll suave
       const el = document.querySelector(item.section);
       if (el) el.scrollIntoView({ behavior: "smooth" });
     } else {
+      // Si estás en /JuegoCofre o cualquier otra página, navega a "/"
       navigate(item.route);
+
+      // Esperamos un instante a que cargue la página de inicio y aplicamos el scroll
+      setTimeout(() => {
+        const el = document.querySelector(item.section);
+        if (el) el.scrollIntoView({ behavior: "smooth" });
+      }, 100);
     }
   };
 
@@ -84,12 +85,10 @@ export default function Navbar() {
                   strokeWidth="1.5"
                 />
                 <circle cx="20" cy="20" r="3" fill="#d4a017" />
-                {/* N S E W */}
                 <polygon points="20,2 22,14 18,14" fill="#d4a017" />
                 <polygon points="20,38 22,26 18,26" fill="#8b6914" />
                 <polygon points="2,20 14,18 14,22" fill="#8b6914" />
                 <polygon points="38,20 26,18 26,22" fill="#8b6914" />
-                {/* tick marks */}
                 {[0, 45, 90, 135, 180, 225, 270, 315].map((angle, i) => (
                   <line
                     key={i}
@@ -128,7 +127,6 @@ export default function Navbar() {
                 }`}
               >
                 {item.label}
-                {/* Animated underline */}
                 <span className="absolute bottom-0 left-1/2 -translate-x-1/2 w-0 h-0.5 bg-gold transition-all duration-300 group-hover:w-4/5" />
               </a>
             ))}

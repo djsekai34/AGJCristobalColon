@@ -137,7 +137,7 @@ export default function JuegoSection() {
         {/* CTA Button */}
         <div className="flex justify-center w-full py-10 -mt-10">
           <motion.button
-            onClick={() => navigate("/juego")}
+            onClick={() => navigate("/JuegoCofre")}
             className="relative font-display text-ocean-deep cursor-pointer overflow-hidden flex items-center justify-center gap-6"
             style={{
               background:

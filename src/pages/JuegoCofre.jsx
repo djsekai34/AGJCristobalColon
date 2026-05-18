@@ -1,10 +1,10 @@
-import JuegoSection from "../components/JuegoSection";
+import JuegoDelCofre from "../components/JuegoDelCofre";
 import Footer from "../components/Footer";
 
-export default function Juego() {
+export default function JuegoCofre() {
   return (
     <main className="pt-16">
-      <JuegoSection />
+      <JuegoDelCofre />
       <Footer />
     </main>
   );
