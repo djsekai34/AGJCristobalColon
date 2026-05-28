@@ -7,6 +7,8 @@ import Explicacion from "./pages/Explicacion";
 import Juego from "./pages/Juego";
 import Nosotros from "./pages/Nosotros";
 import JuegoCofre from "./pages/JuegoCofre";
+import JuegoSellos from "./pages/JuegoSello";
+import JuegoFlappyBird from "./pages/JuegoFlappyBird";
 
 const pageVariants = {
   initial: { opacity: 0, y: 20 },
@@ -31,7 +33,9 @@ function AnimatedRoutes() {
           <Route path="/inicio" element={<Inicio />} />
           <Route path="/explicacion" element={<Explicacion />} />
           <Route path="/juego" element={<Juego />} />
-          <Route path="/JuegoCofre" element={<JuegoCofre />} />
+          <Route path="/ViveresABordo" element={<JuegoCofre />} />
+          <Route path="/ElDiarioDeColon" element={<JuegoSellos />} />
+          <Route path="/ContraCorriente" element={<JuegoFlappyBird />} />
           <Route path="/nosotros" element={<Nosotros />} />
         </Routes>
       </motion.div>

@@ -137,7 +137,13 @@ export default function JuegoSection() {
         {/* CTA Button */}
         <div className="flex justify-center w-full py-10 -mt-10">
           <motion.button
-            onClick={() => navigate("/JuegoCofre")}
+            onClick={() =>
+              window.open(
+                "https://eonesia.tech/mundos-editables/editados/ies-virgendelcarmen/camarote/index.htm",
+                "_blank",
+                "noopener,noreferrer",
+              )
+            }
             className="relative font-display text-ocean-deep cursor-pointer overflow-hidden flex items-center justify-center gap-6"
             style={{
               background:
@@ -147,7 +153,6 @@ export default function JuegoSection() {
               letterSpacing: "0.2em",
               padding: "1.25rem 3rem",
               borderRadius: "2px",
-              // Asegúrate de tener definida la animación pulseGold en tu CSS
               animation: "pulseGold 2s ease-in-out infinite",
             }}
             initial={{ opacity: 0, y: 20 }}

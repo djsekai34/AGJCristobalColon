@@ -147,8 +147,21 @@ export default function ExplicacionSection() {
             <p>
               Este es un videojuego educativo desarrollado en HTML por alumnos
               del <strong>Curso de Especialización de Videojuegos y VR</strong>,
-              para la <strong>Game Jam Andalucía</strong> que se realizará el{" "}
-              <strong>29 de Mayo de 2026</strong>.
+              para la{" "}
+              <strong
+                onClick={() =>
+                  window.open(
+                    "https://andalucia-game-jam.com",
+                    "_blank",
+                    "noopener,noreferrer",
+                  )
+                }
+                className="cursor-pointer transition-colors duration-300"
+                style={{ color: "rgb(10 22 40 / 0.8)" }}
+              >
+                Game Jam Andalucía
+              </strong>{" "}
+              que se realizará el <strong>29 de Mayo de 2026</strong>.
             </p>
             <p>
               Nuestra misión: que la gente descubra cómo fue el descubrimiento
