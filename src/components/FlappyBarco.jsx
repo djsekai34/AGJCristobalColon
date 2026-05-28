@@ -6,14 +6,14 @@ import PiedraImg2 from "../Imagenes/FlappyBarco/piedra2.png";
 import PiedraImg3 from "../Imagenes/FlappyBarco/piedra3.png";
 import PiedraImg4 from "../Imagenes/FlappyBarco/piedra4.png";
 
-const CANVAS_W = 900;
-const CANVAS_H = 500;
+const CANVAS_W = 1050;
+const CANVAS_H = 580;
 const GRAVITY = 0.18;
 const JUMP_FORCE = -6.5;
 const SHIP_W = 90;
 const SHIP_H = 60;
 const ROCK_W = 72;
-const GAP = 190;
+const GAP = 200;
 const ROCK_SPEED_INIT = 2.8;
 const ROCK_INTERVAL = 1600;
 const MAX_LIVES = 3;
@@ -33,13 +33,11 @@ function collides(ax, ay, aw, ah, bx, by, bw, bh, margin = 18) {
   );
 }
 
-// Dibuja una miniatura del barco para representar las vidas en el HUD
 function drawShipLife(ctx, x, y, width, height, full) {
   ctx.save();
   if (full) {
     ctx.drawImage(this, x, y, width, height);
   } else {
-    // Si ha perdido la vida, pintamos la silueta del barco con opacidad reducida
     ctx.globalAlpha = 0.25;
     ctx.drawImage(this, x, y, width, height);
   }
@@ -58,7 +56,6 @@ export default function FlappyBarco() {
   const [bestScore, setBest] = useState(0);
   const [imgsReady, setImgsReady] = useState(false);
 
-  // ── Carga de imágenes ──────────────────────────────────────────────────────
   useEffect(() => {
     const toLoad = {
       fondo: FondoJuego,
@@ -85,7 +82,6 @@ export default function FlappyBarco() {
     });
   }, []);
 
-  // ── Estado inicial ─────────────────────────────────────────────────────────
   const initState = useCallback(
     () => ({
       ship: { x: 140, y: CANVAS_H / 2 - SHIP_H / 2, vy: 0 },
@@ -99,7 +95,6 @@ export default function FlappyBarco() {
     [],
   );
 
-  // ── Bucle principal ────────────────────────────────────────────────────────
   const gameLoop = useCallback((timestamp) => {
     const canvas = canvasRef.current;
     if (!canvas) return;
@@ -107,7 +102,6 @@ export default function FlappyBarco() {
     const S = stateRef.current;
     if (!S) return;
 
-    // Física
     S.ship.vy += GRAVITY;
     S.ship.y += S.ship.vy;
 
@@ -120,7 +114,6 @@ export default function FlappyBarco() {
       S.ship.vy = 0;
     }
 
-    // Generar rocas
     if (timestamp - lastRockRef.current > ROCK_INTERVAL) {
       lastRockRef.current = timestamp;
       const topH = randBetween(60, CANVAS_H - GAP - 60);
@@ -135,7 +128,6 @@ export default function FlappyBarco() {
       });
     }
 
-    // Mover rocas + colisiones
     S.rocks = S.rocks.filter((r) => r.x + ROCK_W > -10);
     for (const r of S.rocks) {
       r.x -= S.rockSpeed;
@@ -189,11 +181,9 @@ export default function FlappyBarco() {
     S.ship.vy = JUMP_FORCE * 0.6;
   }
 
-  // ── Dibujo ─────────────────────────────────────────────────────────────────
   function drawFrame(ctx, S, timestamp) {
     const imgs = imgsRef.current;
 
-    // Fondo
     if (imgs.fondo) {
       ctx.drawImage(imgs.fondo, 0, 0, CANVAS_W, CANVAS_H);
     } else {
@@ -203,24 +193,20 @@ export default function FlappyBarco() {
     ctx.fillStyle = "rgba(5,2,0,0.38)";
     ctx.fillRect(0, 0, CANVAS_W, CANVAS_H);
 
-    // Rocas
     for (const r of S.rocks) {
       const piedraImg = imgs[r.piedraKey];
       if (piedraImg) {
-        // Roca superior (volteada)
         ctx.save();
         ctx.translate(r.x + ROCK_W / 2, r.topH / 2);
         ctx.scale(1, -1);
         ctx.drawImage(piedraImg, -ROCK_W / 2, -r.topH / 2, ROCK_W, r.topH);
         ctx.restore();
-        // Roca inferior
         ctx.drawImage(piedraImg, r.x, r.botY, ROCK_W, r.botH);
       } else {
         drawRockFallback(ctx, r.x, 0, ROCK_W, r.topH, true);
         drawRockFallback(ctx, r.x, r.botY, ROCK_W, r.botH, false);
       }
 
-      // Brillo en el hueco
       const grd = ctx.createLinearGradient(r.x, r.topH, r.x, r.botY);
       grd.addColorStop(0, "rgba(212,160,23,0.06)");
       grd.addColorStop(0.5, "rgba(212,160,23,0.00)");
@@ -229,7 +215,6 @@ export default function FlappyBarco() {
       ctx.fillRect(r.x, r.topH, ROCK_W, GAP);
     }
 
-    // Barco
     const blink = S.invincible > 0 && timestamp - S.invincible < INVINCIBLE_MS;
     const visible =
       !blink || Math.floor((timestamp - S.invincible) / 120) % 2 === 0;
@@ -306,7 +291,6 @@ export default function FlappyBarco() {
   function drawHUD(ctx, S, timestamp) {
     const imgs = imgsRef.current;
 
-    // Puntuación
     ctx.save();
     ctx.font = "bold 28px 'Cinzel Decorative', serif";
     ctx.textAlign = "center";
@@ -318,7 +302,6 @@ export default function FlappyBarco() {
     ctx.fillText(S.score, CANVAS_W / 2, 50);
     ctx.restore();
 
-    // Barcos de Vida en el Canvas
     const lifeW = 42;
     const lifeH = 28;
     for (let i = 0; i < MAX_LIVES; i++) {
@@ -336,7 +319,6 @@ export default function FlappyBarco() {
       ctx.restore();
     }
 
-    // Velocidad
     ctx.save();
     ctx.font = "11px 'Cinzel', serif";
     ctx.textAlign = "right";
@@ -348,7 +330,6 @@ export default function FlappyBarco() {
     );
     ctx.restore();
 
-    // Flash rojo al recibir daño
     const hitAge = timestamp - S.invincible;
     if (hitAge < 300 && S.invincible > 0) {
       ctx.save();
@@ -400,7 +381,6 @@ export default function FlappyBarco() {
     if (phase === "idle" || phase === "dead") drawOverlay(ctx);
   }, [phase, imgsReady]); // eslint-disable-line
 
-  // ── Iniciar / Saltar ───────────────────────────────────────────────────────
   const startGame = useCallback(() => {
     cancelAnimationFrame(rafRef.current);
     stateRef.current = initState();
@@ -437,7 +417,6 @@ export default function FlappyBarco() {
     return () => cancelAnimationFrame(rafRef.current);
   }, []);
 
-  // ── Render ─────────────────────────────────────────────────────────────────
   return (
     <section
       id="flappy"
@@ -613,7 +592,8 @@ export default function FlappyBarco() {
             boxShadow:
               "0 0 0 1px rgba(196,154,42,0.2), 0 20px 60px rgba(0,0,0,0.8)",
             cursor: "pointer",
-            maxWidth: "100%",
+            width: "min(1050px, 100%)",
+            height: "auto",
             touchAction: "none",
           }}
         />
@@ -863,7 +843,7 @@ export default function FlappyBarco() {
           </div>
         )}
 
-        {/* ── Overlay victoria ── */}
+        {/* Overlay victoria */}
         {phase === "won" && (
           <div
             style={{
@@ -878,7 +858,6 @@ export default function FlappyBarco() {
               backdropFilter: "blur(3px)",
             }}
           >
-            {/* Confetti CSS puro */}
             {Array.from({ length: 28 }, (_, i) => (
               <div
                 key={i}
@@ -906,7 +885,7 @@ export default function FlappyBarco() {
             <style>{`
               @keyframes confettiFall {
                 0%   { transform: translateY(0)    rotate(0deg);   opacity: 1; }
-                100% { transform: translateY(560px) rotate(${Math.random() > 0.5 ? "" : "-"}540deg); opacity: 0; }
+                100% { transform: translateY(560px) rotate(540deg); opacity: 0; }
               }
             `}</style>
 
