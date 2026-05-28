@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState, useCallback } from "react";
-import FondoJuego from "../Imagenes//FlappyBarco/Fondo.png";
-import BarcoImg from "../Imagenes//FlappyBarco/Barco.png";
+import FondoJuego from "../Imagenes/FlappyBarco/Fondo.png";
+import BarcoImg from "../Imagenes/FlappyBarco/Barco.png";
 import PiedraImg1 from "../Imagenes/FlappyBarco/piedra1.png";
 import PiedraImg2 from "../Imagenes/FlappyBarco/piedra2.png";
 import PiedraImg3 from "../Imagenes/FlappyBarco/piedra3.png";
